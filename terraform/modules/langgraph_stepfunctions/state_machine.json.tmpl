@@ -1,0 +1,31 @@
+{
+  "Comment": "ARH LangGraph + Step Functions runtime harness PoC. Two states: Intake (Task with lambda:invoke.waitForTaskToken) blocks until external SendTaskSuccess with the human decision; Execute (Task with lambda:invoke) runs execute_transaction + write_audit_record after approval. The human-approval boundary is structurally enforced by waitForTaskToken. Placeholders (${intake_arn}, ${execute_arn}) are rendered by main.tf.",
+  "StartAt": "Intake",
+  "States": {
+    "Intake": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "Parameters": {
+        "FunctionName": "${intake_arn}",
+        "Payload": {
+          "case_id.$": "$.case_id",
+          "case_text.$": "$.case_text",
+          "TaskToken.$": "$$.Task.Token"
+        }
+      },
+      "Next": "Execute"
+    },
+    "Execute": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${execute_arn}",
+        "Payload": {
+          "case_id.$": "$.case_id",
+          "decision.$": "$.decision"
+        }
+      },
+      "End": true
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# ARH PoC - Terraform variables for the LangGraph + Step Functions scenario.
+# Copy to terraform.tfvars and fill in your values. The .tfvars file is gitignored.
+
+aws_region    = "ap-south-1"
+use_bedrock   = true
+bedrock_model = "global.anthropic.claude-haiku-4-5-20251001-v1:0"

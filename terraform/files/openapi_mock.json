@@ -1,0 +1,197 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ARH Mock DataPower REST API",
+    "description": "Mock REST target behind Bedrock AgentCore Gateway for Project ARH PoC. Defines 8 tool paths (classify_intent, extract_fields, retrieve_sop, run_validations, check_similar_cases, create_decision_task, execute_transaction, write_audit_record) that map to the mock DataPower Lambda. Uploaded to S3 and referenced by the AgentCore Gateway target configuration.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://datapower.example.local",
+      "description": "On-prem DataPower target (mocked by Lambda in this PoC)"
+    }
+  ],
+  "paths": {
+    "/classify-intent": {
+      "post": {
+        "operationId": "classify_intent",
+        "summary": "Classify the intent of an incoming case",
+        "description": "Returns the CONTACTS intent, confidence, and work group for a maintenance request.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "case_text": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Classified intent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "intent": { "type": "string" },
+                    "confidence": { "type": "string" },
+                    "work_group": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/extract-fields": {
+      "post": {
+        "operationId": "extract_fields",
+        "summary": "Extract relevant fields from the case document",
+        "description": "Calls the content-central REST API to extract fields and redacts PII before leaving on-prem.",
+        "responses": {
+          "200": {
+            "description": "Extracted fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "extracted_fields": { "type": "object" },
+                    "gateway_redacted": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/retrieve-sop": {
+      "post": {
+        "operationId": "retrieve_sop",
+        "summary": "Retrieve the standard operating procedure for the intent",
+        "description": "Returns the validation checks required for the given intent.",
+        "responses": {
+          "200": {
+            "description": "SOP validation rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "required_checks": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/run-validations": {
+      "post": {
+        "operationId": "run_validations",
+        "summary": "Run address and tax id validation checks",
+        "description": "Calls the validation REST API to verify address, tax id, and duplicate.",
+        "responses": {
+          "200": {
+            "description": "Validation results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-similar-cases": {
+      "post": {
+        "operationId": "check_similar_cases",
+        "summary": "Search for similar prior cases",
+        "description": "Searches on-prem Postgres+pgvector for similar CONTACTS cases.",
+        "responses": {
+          "200": {
+            "description": "Similar cases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-decision-task": {
+      "post": {
+        "operationId": "create_decision_task",
+        "summary": "Create a human approval task in the REVIEW_QUEUE decision queue",
+        "description": "Creates a PENDING decision task. Required regardless of confidence.",
+        "responses": {
+          "200": {
+            "description": "Created decision task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "task_id": { "type": "string" },
+                    "status": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/execute-transaction": {
+      "post": {
+        "operationId": "execute_transaction",
+        "summary": "Execute the approved transaction",
+        "description": "Runs the final transaction after human approval.",
+        "responses": {
+          "200": {
+            "description": "Transaction result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/write-audit-record": {
+      "post": {
+        "operationId": "write_audit_record",
+        "summary": "Write an audit record for the completed case",
+        "description": "Persists an audit log record.",
+        "responses": {
+          "200": {
+            "description": "Audit record status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
