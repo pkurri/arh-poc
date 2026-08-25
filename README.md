@@ -70,6 +70,48 @@ python3 cost_estimate.py --runs 1 --use-bedrock --output COST_ESTIMATE.md
 
 The script produces an itemised markdown table. Bedrock model usage dominates the cost when enabled.
 
+## Run all three PoCs with one command
+
+After AWS credentials are configured, use the orchestration script. It loads the
+optional local `.env` file, validates AWS access, applies the three Terraform
+scenarios, reuses existing AgentCore state when available, runs the tests, and
+prints a summary. It never prints credential values.
+
+For AWS SSO:
+
+```bash
+aws sso login --profile <profile>
+AWS_PROFILE=<profile> python3 scripts/run_all_pocs.py --scenario all --approve
+```
+
+For credentials already exported in the shell:
+
+```bash
+python3 scripts/run_all_pocs.py --scenario all --approve
+```
+
+The AgentCore scenarios also require `SHARED_S3_BUCKET` in the uncommitted
+`.env` file or `TF_VAR_openapi_bucket_name` in the environment. Copy `.env.example`
+to `.env` and set the existing bucket name before running.
+
+Useful options:
+
+```text
+--scenario all|claude|strands|langgraph
+--region ap-south-1
+--bedrock-model <model-or-inference-profile>
+--deterministic       LangGraph routing without Bedrock calls
+--approve             Automatically approve the LangGraph decision task
+--cleanup             Destroy Terraform-managed resources after completion
+--keep-resources      Keep AWS resources (the default behavior)
+--validate-only       Check tools and AWS credentials without changing resources
+```
+
+Without `--approve`, LangGraph stops at `waitForTaskToken` and leaves the
+execution waiting for an external approval. Use `--cleanup` only when the test
+is complete and an approval has been provided. AgentCore Gateway/Harness
+resources created outside Terraform may require separate AgentCore deletion.
+
 ## 1. Claude Agent SDK (Bedrock AgentCore Harness)
 
 ```bash
@@ -110,6 +152,12 @@ python3 ../../scripts/test_langgraph.py \
   --state-machine-arn $(terraform output -raw state_machine_arn) \
   --dynamodb-table $(terraform output -raw dynamodb_table)
 ```
+
+## Step Functions explanation
+
+For a detailed explanation of the LangGraph Step Functions state machine, its
+`Intake` and `Execute` states, `waitForTaskToken`, manual approval callback, and
+DynamoDB state handling, see [`docs/ARH_STEP_FUNCTIONS_EXPLANATION.md`](docs/ARH_STEP_FUNCTIONS_EXPLANATION.md).
 
 ## Cleaning up
 

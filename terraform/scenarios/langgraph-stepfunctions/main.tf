@@ -12,10 +12,11 @@ provider "aws" {
 }
 
 module "langgraph" {
-  source        = "../../modules/langgraph_stepfunctions"
-  region        = var.aws_region
-  use_bedrock   = var.use_bedrock
-  bedrock_model = var.bedrock_model
+  source             = "../../modules/langgraph_stepfunctions"
+  region             = var.aws_region
+  state_machine_name = var.state_machine_name
+  use_bedrock        = var.use_bedrock
+  bedrock_model      = var.bedrock_model
 }
 
 output "state_machine_arn" {

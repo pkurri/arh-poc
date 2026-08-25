@@ -19,6 +19,7 @@ Every file in the repository and what it does.
 | `ARH_CLAUDE_RUN_REPORT.md` | Full run report for the Claude AgentCore Harness scenario |
 | `ARH_STRANDS_RUN_REPORT.md` | Full run report for the Strands AgentCore Harness scenario |
 | `ARH_LANGGRAPH_RUN_REPORT.md` | Full run report for the LangGraph + Step Functions scenario |
+| `ARH_STEP_FUNCTIONS_EXPLANATION.md` | Detailed explanation of the Step Functions state machine and manual approval flow |
 | `ARH_HARNESS_COMPARISON.md` | Side-by-side comparison of all three scenarios |
 | `ARH_TEST_REPORT.md` | Combined test report |
 
@@ -38,7 +39,8 @@ Every file in the repository and what it does.
 |---|---|
 | `setup_agentcore.py` | Creates/reuses a Bedrock AgentCore Gateway + Harness for Claude or Strands |
 | `test_harness.py` | Invokes an AgentCore Harness and captures transcript, tokens, latency |
-| `test_langgraph.py` | End-to-end test driver for LangGraph + Step Functions (start, approve, verify) |
+| `test_langgraph.py` | End-to-end test driver for LangGraph + Step Functions (start, approve, verify); supports waiting at manual approval |
+| `run_all_pocs.py` | One-command orchestrator for credentials validation, Terraform, all tests, approval control, and optional cleanup |
 
 ## terraform/files/
 

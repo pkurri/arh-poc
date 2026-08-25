@@ -17,3 +17,8 @@ variable "bedrock_model" {
   type        = string
   default     = "global.anthropic.claude-haiku-4-5-20251001-v1:0"
 }
+
+variable "openapi_bucket_name" {
+  description = "Existing S3 bucket used for the OpenAPI tool schema"
+  type        = string
+}

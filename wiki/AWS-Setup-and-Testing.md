@@ -8,6 +8,31 @@
 - AWS credentials with permissions for IAM, Lambda, DynamoDB, Step Functions,
   Bedrock, Bedrock AgentCore, and S3
 
+## Run all three scenarios with one command
+
+The repository includes `scripts/run_all_pocs.py` to validate credentials, apply
+Terraform, reuse existing AgentCore resources, run the Claude/Strands harnesses,
+and run LangGraph. Credentials must come from the standard AWS credential chain;
+never hardcode them in the script.
+
+```bash
+# AWS SSO
+aws sso login --profile <profile>
+AWS_PROFILE=<profile> python3 scripts/run_all_pocs.py --scenario all --approve
+
+# Or use credentials already exported in the shell
+python3 scripts/run_all_pocs.py --scenario all --approve
+```
+
+The script reads `SHARED_S3_BUCKET` from the uncommitted `.env` file for the
+AgentCore OpenAPI schema upload. Use `--scenario claude`, `--scenario strands`,
+or `--scenario langgraph` to run one scenario. By default LangGraph stops at
+`waitForTaskToken`; add `--approve` to automatically resume it. Add `--cleanup`
+to destroy Terraform-managed resources after a completed run. Resources are
+kept by default, and AgentCore resources created outside Terraform may require
+separate AgentCore deletion. Use `--validate-only` to verify local tools and AWS
+credentials without changing any resources.
+
 ## Scenario 1: Claude AgentCore Harness
 
 ```bash

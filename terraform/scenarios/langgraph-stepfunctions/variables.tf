@@ -14,6 +14,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "state_machine_name" {
+  description = "Name of the Step Functions state machine"
+  type        = string
+  default     = "arh-langgraph-state-machine"
+}
+
 variable "use_bedrock" {
   description = "If true, the LangGraph agent calls Bedrock Converse"
   type        = bool

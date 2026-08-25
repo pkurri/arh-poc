@@ -82,15 +82,15 @@ resource "aws_iam_role_policy_attachment" "mock_lambda_basic" {
 }
 
 resource "aws_lambda_function" "data_power_mock" {
-  function_name = "${local.prefix}-datapower-mock"
-  role          = aws_iam_role.mock_lambda.arn
-  handler       = "mock_lambda.handler"
-  runtime       = "python3.12"
-  filename      = data.archive_file.mock_lambda.output_path
+  function_name    = "${local.prefix}-datapower-mock"
+  role             = aws_iam_role.mock_lambda.arn
+  handler          = "mock_lambda.handler"
+  runtime          = "python3.12"
+  filename         = data.archive_file.mock_lambda.output_path
   source_code_hash = data.archive_file.mock_lambda.output_base64sha256
-  timeout       = 30
-  memory_size   = 256
-  tags          = local.common_tags
+  timeout          = 30
+  memory_size      = 256
+  tags             = local.common_tags
 
   environment {
     variables = {
@@ -144,8 +144,8 @@ resource "aws_iam_role_policy" "langgraph_lambda" {
         Resource = aws_dynamodb_table.checkpoints.arn
       },
       {
-        Effect = "Allow"
-        Action = ["lambda:InvokeFunction"]
+        Effect   = "Allow"
+        Action   = ["lambda:InvokeFunction"]
         Resource = aws_lambda_function.data_power_mock.arn
       },
       {
@@ -161,15 +161,15 @@ resource "aws_iam_role_policy" "langgraph_lambda" {
 }
 
 resource "aws_lambda_function" "intake" {
-  function_name = "${local.prefix}-intake"
-  role          = aws_iam_role.langgraph_lambda.arn
-  handler       = "langgraph_lambda.intake_handler"
-  runtime       = "python3.12"
-  filename      = data.archive_file.langgraph.output_path
+  function_name    = "${local.prefix}-intake"
+  role             = aws_iam_role.langgraph_lambda.arn
+  handler          = "langgraph_lambda.intake_handler"
+  runtime          = "python3.12"
+  filename         = data.archive_file.langgraph.output_path
   source_code_hash = data.archive_file.langgraph.output_base64sha256
-  timeout       = 60
-  memory_size   = 512
-  tags          = local.common_tags
+  timeout          = 60
+  memory_size      = 512
+  tags             = local.common_tags
 
   environment {
     variables = {
@@ -182,15 +182,15 @@ resource "aws_lambda_function" "intake" {
 }
 
 resource "aws_lambda_function" "execute" {
-  function_name = "${local.prefix}-execute"
-  role          = aws_iam_role.langgraph_lambda.arn
-  handler       = "langgraph_lambda.execute_handler"
-  runtime       = "python3.12"
-  filename      = data.archive_file.langgraph.output_path
+  function_name    = "${local.prefix}-execute"
+  role             = aws_iam_role.langgraph_lambda.arn
+  handler          = "langgraph_lambda.execute_handler"
+  runtime          = "python3.12"
+  filename         = data.archive_file.langgraph.output_path
   source_code_hash = data.archive_file.langgraph.output_base64sha256
-  timeout       = 60
-  memory_size   = 512
-  tags          = local.common_tags
+  timeout          = 60
+  memory_size      = 512
+  tags             = local.common_tags
 
   environment {
     variables = {
@@ -257,7 +257,7 @@ resource "aws_cloudwatch_log_group" "sfn" {
 }
 
 resource "aws_sfn_state_machine" "main" {
-  name     = "${local.prefix}-state-machine"
+  name     = var.state_machine_name
   role_arn = aws_iam_role.sfn.arn
   type     = "STANDARD"
   tags     = local.common_tags

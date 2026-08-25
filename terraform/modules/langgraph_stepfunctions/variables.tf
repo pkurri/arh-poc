@@ -15,6 +15,12 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "state_machine_name" {
+  description = "Name of the Step Functions state machine; use a unique name if a previous state machine is still deleting"
+  type        = string
+  default     = "arh-langgraph-state-machine"
+}
+
 variable "environment" {
   description = "Environment tag"
   type        = string

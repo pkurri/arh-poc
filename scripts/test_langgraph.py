@@ -9,6 +9,7 @@ What this file does:
   - Waits for the execution to reach SUCCEEDED/FAILED and prints the final
     output, status, and timing.
   - Usage: `python3 scripts/test_langgraph.py --state-machine-arn <arn> --dynamodb-table <table>`
+             Add `--wait-for-approval` to stop at the callback boundary without approving.
 """
 
 import argparse
@@ -54,6 +55,11 @@ def main() -> int:
     parser.add_argument("--case-id", default=f"CASE-{uuid.uuid4().hex[:8].upper()}")
     parser.add_argument("--case-text", default="A broker emailed a change to the group on-file contacts.")
     parser.add_argument("--decision", default="Approved", choices=["Approved", "Denied"])
+    parser.add_argument(
+        "--wait-for-approval",
+        action="store_true",
+        help="Stop after storing the task token; do not call SendTaskSuccess",
+    )
     parser.add_argument("--region", default=None)
     args = parser.parse_args()
 
@@ -78,6 +84,12 @@ def main() -> int:
     if not token:
         print("Timed out waiting for decision task token", file=sys.stderr)
         return 1
+
+    if args.wait_for_approval:
+        print("Manual approval required.")
+        print(f"Execution remains paused: {execution_arn}")
+        print(f"Task token is stored in DynamoDB table {args.dynamodb_table} for case {args.case_id}.")
+        return 0
 
     print(f"Resuming execution with decision={args.decision}...")
     try:

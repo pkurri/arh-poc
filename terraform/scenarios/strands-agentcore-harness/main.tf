@@ -11,10 +11,11 @@ provider "aws" {
 }
 
 module "agentcore_harness" {
-  source   = "../../modules/agentcore_harness"
-  flavor   = "strands"
-  region   = var.aws_region
-  model_id = var.bedrock_model
+  source              = "../../modules/agentcore_harness"
+  flavor              = "strands"
+  region              = var.aws_region
+  model_id            = var.bedrock_model
+  openapi_bucket_name = var.openapi_bucket_name
 }
 
 output "harness_execution_role_arn" {
