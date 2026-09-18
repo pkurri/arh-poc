@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "RequirePermissionsBoundaryOnCreate",
+      "Effect": "Deny",
+      "Action": "iam:CreateRole",
+      "Resource": "arn:aws:iam::000789387090:role/arh-*",
+      "Condition": {
+        "StringNotEquals": {
+          "iam:PermissionsBoundary": "arn:aws:iam::000789387090:policy/arh-role-boundary"
+        }
+      }
+    }
+  ]
+}
