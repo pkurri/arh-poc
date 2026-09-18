@@ -20,6 +20,7 @@ Every file in the repository and what it does.
 | `ARH_STRANDS_RUN_REPORT.md` | Full run report for the Strands AgentCore Harness scenario |
 | `ARH_LANGGRAPH_RUN_REPORT.md` | Full run report for the LangGraph + Step Functions scenario |
 | `ARH_STEP_FUNCTIONS_EXPLANATION.md` | Detailed explanation of the Step Functions state machine and manual approval flow |
+| `ARH_CLAUDE_PROCESS_FLOW.md` | Detailed Claude AgentCore Harness process and tool-calling flow |
 | `ARH_HARNESS_COMPARISON.md` | Side-by-side comparison of all three scenarios |
 | `ARH_TEST_REPORT.md` | Combined test report |
 

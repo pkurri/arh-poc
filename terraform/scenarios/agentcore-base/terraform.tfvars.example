@@ -1,0 +1,6 @@
+# ARH PoC - Terraform variables for Stage 1: bare AgentCore Runtime IAM role.
+# Copy to terraform.tfvars and fill in your values. The .tfvars file is gitignored.
+
+aws_region    = "us-east-1"
+container_uri = "<account-id>.dkr.ecr.us-east-1.amazonaws.com/<your-agent-image>:latest"
+bedrock_model = "global.anthropic.claude-haiku-4-5-20251001-v1:0"

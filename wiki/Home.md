@@ -19,6 +19,7 @@ cases (CONTACTS / REVIEW_QUEUE work group) through a fixed set of 8 tools.
 - [[Scenario 2 - Strands AgentCore Harness]] - Configuration, run, results
 - [[Scenario 3 - LangGraph Step Functions]] - Configuration, run, results
 - [[ARH Step Functions Explanation]] - Detailed state-machine and approval-flow explanation
+- [[ARH Claude Process Flow]] - Detailed Claude AgentCore Harness process and tool-calling flow
 - [[Harness Comparison]] - Side-by-side comparison of all three runs
 - [[File Index]] - Every file in the repo and what it does
 - [[AWS Setup and Testing]] - How to deploy and test in an AWS account

@@ -153,11 +153,15 @@ python3 ../../scripts/test_langgraph.py \
   --dynamodb-table $(terraform output -raw dynamodb_table)
 ```
 
-## Step Functions explanation
+## Runtime process documentation
 
 For a detailed explanation of the LangGraph Step Functions state machine, its
 `Intake` and `Execute` states, `waitForTaskToken`, manual approval callback, and
 DynamoDB state handling, see [`docs/ARH_STEP_FUNCTIONS_EXPLANATION.md`](docs/ARH_STEP_FUNCTIONS_EXPLANATION.md).
+
+For the equivalent Claude AgentCore Harness process, including Gateway/MCP tool
+registration, Harness invocation, Claude's managed tool-calling loop, metrics,
+approval behavior, and cleanup, see [`docs/ARH_CLAUDE_PROCESS_FLOW.md`](docs/ARH_CLAUDE_PROCESS_FLOW.md).
 
 ## Cleaning up
 

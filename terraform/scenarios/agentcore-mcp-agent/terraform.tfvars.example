@@ -1,0 +1,8 @@
+# ARH PoC - Terraform variables for Stage 2: AgentCore Gateway (MCP server) IAM role.
+# Copy to terraform.tfvars and fill in your values. The .tfvars file is gitignored.
+# Run Stage 1 (../agentcore-base) first and get agent_runtime_arn from
+# ~/.arh/agentcore_base.json after scripts/setup_agentcore_base.py succeeds.
+
+aws_region        = "us-east-1"
+agent_runtime_arn = "arn:aws:bedrock-agentcore:us-east-1:<account-id>:runtime/<runtime-id>"
+gateway_name      = "arh-agentcore-gateway"
